@@ -1,0 +1,5 @@
+**/build
+**/dep
+**/isofiles
+*.code-workspace
+.vscode
