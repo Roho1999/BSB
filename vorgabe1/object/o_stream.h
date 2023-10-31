@@ -21,9 +21,15 @@
 
 #include "object/strbuf.h"
 
-class O_Stream: Stringbuffer
+class O_Stream: public Stringbuffer
  {
 public:
+      O_Stream() : Stringbuffer() {};
+
+      enum Mode {bin, oct, dec, hex};
+
+      Mode mode = dec;
+
       /**
        * @brief Anfügen des Zeichens c an die gesammelten Zeichen.
        * 
@@ -71,7 +77,9 @@ public:
 
 private:
       O_Stream(const O_Stream &copy); // Verhindere Kopieren
-/* TODO: Hier muesst ihr selbst Code vervollstaendigen */     
+      void print_num(long number);
+      void handle_hex(long dec);
+/* TODO: Hier muesst ihr selbst Code vervollstaendigen */ 
  };
 
 /*---------------------------------------------------------------------------*/
@@ -86,6 +94,8 @@ private:
 /* Aufgabe der Manipulatoren ist, die Darstellung der nachfolgenden Ausgaben */
 /* zu beeinflussen, z.B durch die Wahl des Zahlensystems.                    */
 /*---------------------------------------------------------------------------*/
+
+
 
 /**
  * @brief fügt einen Zeilenumbruch ein.

@@ -14,3 +14,11 @@
 #include "device/efistr.h"
 
 /* TODO: Hier muesst ihr selbst Code vervollstaendigen */ 
+
+
+void EFI_Stream::flush()
+{
+    print(this->charbuffer, 5, Pixel(0xffffff), Pixel(0x000000));
+}
+
+

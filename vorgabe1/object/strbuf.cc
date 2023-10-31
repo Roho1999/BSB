@@ -26,7 +26,13 @@
  * @param c 
  */
 void Stringbuffer::put (char c){
-
+    this->charbuffer[this->position] = c;
+    this->position += 1;
+    if (this->position >= 5) 
+    {
+        this->flush();
+        this->position = 0;
+    }
 }
 
 //Die flush() Methode sollte denke nicht hier implementiert sein, die ist als true virtual deklariert 

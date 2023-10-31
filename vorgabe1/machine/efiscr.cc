@@ -117,7 +117,6 @@ void EFI_Screen::print (const char* text,
     int x = 0; // Spalte
     int y = 0; // Zeile
     getpos(x, y); 
-    //unsigned int bytesperline = FONT.bytesperglyph / FONT.height;
 
     for (int i = 0; i < length; i++)
     {
