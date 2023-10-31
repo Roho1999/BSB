@@ -37,7 +37,7 @@ int main()
   
   length = 26;
 
-  for (int i = 0; i < 90; i++)
+  for (int i = 0; i < 150; i++)
   {
     EFI_sc.print("ABCDEFGHIJKLMNOPQRSTUVWXYZ", length, Pixel(0xffffff), Pixel(0x000000));
   }

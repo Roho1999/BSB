@@ -62,11 +62,11 @@ void EFI_Screen::show(int x, int y, unsigned char c, Pixel fg_color = Pixel(0xff
             {
                 if((glyph[y_n*bytesperline + x_n] >> (7-bit)) & 0x1)
                 {
-                    fb.set_pixel(x + x_n*8 + bit, y + y_n, Pixel(fg_color));
+                    fb.set_pixel(x*bytesperline*8 + x_n*8 + bit, y*FONT.height + y_n, Pixel(fg_color));
                 }
                 else
                 {
-                    fb.set_pixel(x + x_n*8 + bit, y + y_n, Pixel(bg_color));
+                    fb.set_pixel(x*bytesperline*8 + x_n*8 + bit, y*FONT.height + y_n, Pixel(bg_color));
                 }
             } 
         }
@@ -114,37 +114,40 @@ void EFI_Screen::print (const char* text,
                         Pixel fg_color = Pixel(0xffffff),
                         Pixel bg_color = Pixel(0x000000))
 {
-    int x = 0;
-    int y = 0;
+    int x = 0; // Spalte
+    int y = 0; // Zeile
     getpos(x, y); 
-    unsigned int bytesperline = FONT.bytesperglyph / FONT.height;
+    //unsigned int bytesperline = FONT.bytesperglyph / FONT.height;
 
     for (int i = 0; i < length; i++)
     {
-        if(text[i] == "\n"[0] && i+1<length)
+        // Absatz ist gewünscht
+        if(text[i] == '\n' && i+1<length)
         {
             x = 0;
-            y += FONT.height;
+            y += 1;
             i = i+1;
         }
 
-
-        show(x, y, text[i], fg_color, bg_color);
-        x += bytesperline*8;
-
-        if (x + bytesperline*8 > efifb.get_width())
+        // Ende einer Zeile
+        if (x >= getcolumns())
         {
             x = 0;
-            y += FONT.height;
+            y += 1;
         }
 
-
-        if (y / FONT.height > getrows())
+        // Wann wollen wir scrollen?
+        if (y >= getrows())
         {
-            show(0, 0, "x"[0], fg_color, bg_color);
+            show(0, 0, 'x', fg_color, bg_color);
             scroll_up();
+            y -= 1;
         }
-        
+
+        // Zeige das Zeichen an und packe Cursor weiter
+        show(x, y, text[i], fg_color, bg_color);
+        x += 1;
+  
     }
     setpos(x, y);
 
@@ -155,7 +158,7 @@ void EFI_Screen::scroll_up()
 {
     for (unsigned int x = 0; x < this->fb.get_width(); x++)
     {
-        for (unsigned int y = 0; y < this->fb.get_height(); x++)
+        for (unsigned int y = 0; y < this->fb.get_height(); y++)
         {
             this->fb.set_pixel(x, y, this->fb.get_pixel(x, y + FONT.height));
         }
