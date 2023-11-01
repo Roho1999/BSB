@@ -17,6 +17,14 @@
 
 /* TODO: Hier muesst ihr selbst Code vervollstaendigen */ 
 
+Stringbuffer::Stringbuffer()
+{
+    for (unsigned int i = 0; i < this->length; i++)
+    {
+        this->charbuffer[i] = '\0';
+    }
+}
+
 
 /**
  * @brief Diese Methode fügt das Zeichen c an das Ende der bereits gesammelten Zeichen an.
@@ -28,7 +36,7 @@
 void Stringbuffer::put (char c){
     this->charbuffer[this->position] = c;
     this->position += 1;
-    if (this->position >= 5) 
+    if (this->position >= this->length - 1) 
     {
         this->flush();
         this->position = 0;

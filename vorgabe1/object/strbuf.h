@@ -20,7 +20,7 @@ class Stringbuffer
  {
 
 public:
-      Stringbuffer() = default;
+      Stringbuffer(); // mit null initialisieren
       /**
        * @brief Diese Methode fügt das Zeichen c an das Ende der bereits gesammelten Zeichen an.
        *  Wenn die Pufferkapazität des Stringbuffer-Objektes nun erschöpft ist,
@@ -36,7 +36,8 @@ public:
        * 
        */
       virtual void flush()=0;
-      char charbuffer[5];
+      const static int length = 30;
+      char charbuffer[length];
       unsigned int position = 0;
 
 private:

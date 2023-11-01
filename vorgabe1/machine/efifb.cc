@@ -71,22 +71,24 @@ void EFI_Framebuffer::blit_rect(const Framebuffer &fb,
                                 unsigned int x = 0, // neue Stelle
                                 unsigned int y = 0) // neue Stelle
 {
-
     unsigned int *efifb = (unsigned int*) bootloader_info->framebuffer_pointer;
     unsigned int *pixelptr_new = efifb;
 
-    for (unsigned int y_new = y; y_new < y + hr; y_new++)
+    if (xr + wr < fb.get_width() && yr + hr < fb.get_width())
     {
-        for (unsigned int x_new = x; x_new < x + wr; x_new++)
+        for (unsigned int y_new = y; y_new < y + hr; y_new++)
         {
-            if (x_new <= this->width || y_new <= this->height)
+            for (unsigned int x_new = x; x_new < x + wr; x_new++)
             {
-                Pixel pixel_old = fb.get_pixel(xr + x_new - x, yr + y_new - y);
+                if (x_new <= this->width || y_new <= this->height)
+                {
+                    Pixel pixel_old = fb.get_pixel(xr + x_new - x, yr + y_new - y);
 
-                unsigned int value = pixel_old.get_value();
+                    unsigned int value = pixel_old.get_value();
 
-                pixelptr_new = efifb + y_new * this->width + x_new;
-                *pixelptr_new = value;
+                    pixelptr_new = efifb + y_new * this->width + x_new;
+                    *pixelptr_new = value;
+                }
             }
         }
     }

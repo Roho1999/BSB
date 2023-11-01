@@ -123,6 +123,7 @@ void O_Stream::handle_bin(long dec)
 
 void O_Stream::handle_hex(long dec)
 {
+
      int length = 0;
      long temp = dec;
      while(temp != 0) {
@@ -214,6 +215,11 @@ O_Stream& O_Stream::operator<< (unsigned short number){
 }
 
 O_Stream& O_Stream::operator<< (short number){
+     if (number < 0)
+     {
+          number *= -1;
+          this->put('-');
+     }
      conv_to_mode(this->mode, number);
      return *this;
 }
@@ -224,6 +230,11 @@ O_Stream& O_Stream::operator<< (unsigned int number){
 }
 
 O_Stream& O_Stream::operator<< (int number){
+     if (number < 0)
+     {
+          number *= -1;
+          this->put('-');
+     }
      conv_to_mode(this->mode, number);
      return *this;
 }
@@ -234,6 +245,11 @@ O_Stream& O_Stream::operator<< (unsigned long number){
 }
 
 O_Stream& O_Stream::operator<< (long number){
+     if (number < 0)
+     {
+          number *= -1;
+          this->put('-');
+     }
      conv_to_mode(this->mode, number);
      return *this;
 }
@@ -243,8 +259,6 @@ O_Stream& O_Stream::operator<< (long number){
 * 
 */
 O_Stream& O_Stream::operator<< (void* pointer){
-     long hex_ptr = (long) pointer;
-     handle_hex(hex_ptr);
      return *this;
 }
 
@@ -283,7 +297,7 @@ O_Stream& O_Stream::operator<< (O_Stream& (*fkt) (O_Stream&)){
 */
 O_Stream& endl (O_Stream& os){
      os.put('\n');
-     //os.flush();
+     os.flush();
      return os;
 }
 
