@@ -18,7 +18,11 @@
 
 void EFI_Stream::flush()
 {
-    print(this->charbuffer, 5, Pixel(0xffffff), Pixel(0x000000));
+    print(this->charbuffer, Pixel(0xffffff), Pixel(0x000000));
+    for (unsigned int i = 0; this->charbuffer[i] != '\0'; i++)
+    {
+        this->charbuffer[i] = '\0';
+    }
 }
 
 

@@ -21,7 +21,7 @@ class EFI_Stream : public O_Stream, public EFI_Screen
 /* TODO: Hier muesst ihr selbst Code vervollstaendigen */ 
  {
 public: 
-      EFI_Stream() : EFI_Screen(), O_Stream() {};
+      EFI_Stream() : O_Stream(), EFI_Screen() {};
 
       void flush();
 private:

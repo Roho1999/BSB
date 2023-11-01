@@ -78,7 +78,11 @@ public:
 private:
       O_Stream(const O_Stream &copy); // Verhindere Kopieren
       void print_num(long number);
+      void conv_to_mode(O_Stream::Mode mode, long number);
       void handle_hex(long dec);
+      void handle_bin(long dec);
+      void handle_oct(long dec);
+      void handle_dec(long dec);
 /* TODO: Hier muesst ihr selbst Code vervollstaendigen */ 
  };
 

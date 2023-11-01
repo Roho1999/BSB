@@ -22,88 +22,126 @@
 
 
 
-
-int count_digit(long number)
+void O_Stream::handle_dec(long dec)
 {
-   int count = 0;
-   while(number != 0) {
-      number = number / 10;
-      count++;
-   }
-   return count;
-}
-
-
-
-void O_Stream::print_num(long number)
-{
-     unsigned int length = count_digit(number);
-
-     int count = 0;
-     char cs[length];
-     unsigned int current;
-     while(number != 0) {
-          cs[length-count-1] = number % 10;
-          number = number / 10;
-          count++;
+     int length = 0;
+     long temp = dec;
+     while(temp != 0) {
+          temp = temp / 10;
+          length++;
      }
-     for (unsigned int i = 0; i < length; i++)
+     if (length == 0)
      {
-          current = cs[i];
-          char c = current + 48;
-          this->put(c);
+          this->put('0');
      }
-}
 
-
-
-int count_digit_hex(long number)
-{
-   int count = 0;
-   while(number != 0) {
-      number = number / 16;
-      count++;
-   }
-   return count;
-}
-
-
-long conv_to_bin(long decimal)
-{
-     int binary = 0, remainder, product = 1;
-     while (decimal != 0) {
-          remainder = decimal % 2;
-          binary = binary + (remainder * product);
-          decimal = decimal / 2;
-          product *= 10;
-     }
-     return binary;
-}
-
-long conv_to_oct(long decimal)
-{
-     int oct = 0, remainder, product = 1;
-     while (decimal != 0) {
-          remainder = decimal % 8;
-          oct = oct + (remainder * product);
-          decimal = decimal / 8;
-          product *= 10;
-     }
-     return oct;
-}
-
-void O_Stream::handle_hex(long dec)
-{
-     int length = count_digit_hex(dec);
      char s[length];
      int rem;
      int counter = 0;
-     while (dec > 0)   // Do this whilst the quotient is greater than 0.
+     while (dec > 0)
      {
-          rem = dec % 16; // Get the remainder.
+          rem = dec % 10;
+          s[length-counter-1] = (char) (rem + 48);
+          dec = dec/10;
+          counter++;
+     }
+     
+     char current;
+     for (int i = 0; i < length; i++)
+     {
+          current = s[i];
+          this->put(current);
+     }
+}
+
+
+void O_Stream::handle_oct(long dec)
+{
+     int length = 0;
+     long temp = dec;
+     while(temp != 0) {
+          temp = temp / 8;
+          length++;
+     }
+     if (length == 0)
+     {
+          this->put('0');
+     }
+
+     char s[length];
+     int rem;
+     int counter = 0;
+     while (dec > 0)
+     {
+          rem = dec % 8;
+          s[length-counter-1] = (char) (rem + 48);
+          dec = dec/8;
+          counter++;
+     }
+     
+     char current;
+     for (int i = 0; i < length; i++)
+     {
+          current = s[i];
+          this->put(current);
+     }
+}
+
+
+void O_Stream::handle_bin(long dec)
+{
+     int length = 0;
+     long temp = dec;
+     while(temp != 0) {
+          temp = temp / 2;
+          length++;
+     }
+     if (length == 0)
+     {
+          this->put('0');
+     }
+
+     char s[length];
+     int rem;
+     int counter = 0;
+     while (dec > 0)
+     {
+          rem = dec % 2;
+          s[length-counter-1] = (char) (rem + 48);
+          dec = dec/2;
+          counter++;
+     }
+
+     char current;
+     for (int i = 0; i < length; i++)
+     {
+          current = s[i];
+          this->put(current);
+     }
+}
+
+
+void O_Stream::handle_hex(long dec)
+{
+     int length = 0;
+     long temp = dec;
+     while(temp != 0) {
+          temp = temp / 16;
+          length++;
+     }
+     if (length == 0)
+     {
+          this->put('0');
+     }
+
+     char s[length];
+     int rem;
+     int counter = 0;
+     while (dec > 0)
+     {
+          rem = dec % 16;
           if (rem > 9)
           {
-               // Map the character given that the remainder is greater than 9.
                switch (rem)
                {
                     case 10: s[length-counter-1] = 'A'; break;
@@ -122,27 +160,33 @@ void O_Stream::handle_hex(long dec)
           counter++;
      }
      char current;
-     for (unsigned int i = 0; i < length; i++)
+     for (int i = 0; i < length; i++)
      {
           current = s[i];
           this->put(current);
      }
 }
 
-long conv_to_mode(O_Stream::Mode mode, long number)
+
+void O_Stream::conv_to_mode(O_Stream::Mode mode, long number)
 {
      switch (mode)
      {
      case O_Stream::bin:
-          number = conv_to_bin(number);
+          handle_bin(number);
           break;
      case O_Stream::oct:
-          number = conv_to_oct(number);
+          handle_oct(number);
           break; 
-     default:
+     case O_Stream::hex:
+          handle_hex(number);
+          break; 
+     case O_Stream::dec:
+          handle_dec(number);
           break;
+     default:
+          break; 
      }
-     return number;
 }
 
 
@@ -165,86 +209,32 @@ O_Stream& O_Stream::operator<< (char c){
 * 
 */
 O_Stream& O_Stream::operator<< (unsigned short number){
-     if (this->mode == hex)
-     {
-          handle_hex(number);
-     }
-     else
-     {
-          number = conv_to_mode(this->mode, number);
-          print_num(number);
-     }
-     
+     conv_to_mode(this->mode, number);
      return *this;
 }
 
 O_Stream& O_Stream::operator<< (short number){
-     if (this->mode == hex)
-     {
-          handle_hex(number);
-     }
-     else
-     {
-          number = conv_to_mode(this->mode, number);
-          print_num(number);
-     }
-     
+     conv_to_mode(this->mode, number);
      return *this;
 }
 
 O_Stream& O_Stream::operator<< (unsigned int number){
-     if (this->mode == hex)
-     {
-          handle_hex(number);
-     }
-     else
-     {
-          number = conv_to_mode(this->mode, number);
-          print_num(number);
-     }
-     
+     conv_to_mode(this->mode, number);
      return *this;
 }
 
 O_Stream& O_Stream::operator<< (int number){
-     if (this->mode == hex)
-     {
-          handle_hex(number);
-     }
-     else
-     {
-          number = conv_to_mode(this->mode, number);
-          print_num(number);
-     }
-     
+     conv_to_mode(this->mode, number);
      return *this;
 }
 
 O_Stream& O_Stream::operator<< (unsigned long number){
-     if (this->mode == hex)
-     {
-          handle_hex(number);
-     }
-     else
-     {
-          number = conv_to_mode(this->mode, number);
-          print_num(number);
-     }
-     
+     conv_to_mode(this->mode, number);
      return *this;
 }
 
 O_Stream& O_Stream::operator<< (long number){
-     if (this->mode == hex)
-     {
-          handle_hex(number);
-     }
-     else
-     {
-          number = conv_to_mode(this->mode, number);
-          print_num(number);
-     }
-     
+     conv_to_mode(this->mode, number);
      return *this;
 }
 
@@ -253,7 +243,9 @@ O_Stream& O_Stream::operator<< (long number){
 * 
 */
 O_Stream& O_Stream::operator<< (void* pointer){
-
+     long hex_ptr = (long) pointer;
+     handle_hex(hex_ptr);
+     return *this;
 }
 
 /**
@@ -291,6 +283,7 @@ O_Stream& O_Stream::operator<< (O_Stream& (*fkt) (O_Stream&)){
 */
 O_Stream& endl (O_Stream& os){
      os.put('\n');
+     //os.flush();
      return os;
 }
 

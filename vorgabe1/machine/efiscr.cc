@@ -110,7 +110,6 @@ void EFI_Screen::getpos (int &x, int &y) const
 // Ein Zeilenumbruch muss auch erfolgen, wann immer das Zeichen '\n' im auszugebenen Text enthalten ist. 
 
 void EFI_Screen::print (const char* text,
-                        int length,
                         Pixel fg_color = Pixel(0xffffff),
                         Pixel bg_color = Pixel(0x000000))
 {
@@ -118,35 +117,34 @@ void EFI_Screen::print (const char* text,
     int y = 0; // Zeile
     getpos(x, y); 
 
-    for (int i = 0; i < length; i++)
+    for (int i = 0; text[i] != '\0'; i++)
     {
         // Absatz ist gewünscht
-        if(text[i] == '\n' && i+1<length)
-        {
-            x = 0;
-            y += 1;
-            i = i+1;
-        }
-
-        // Ende einer Zeile
-        if (x >= getcolumns())
+        if(text[i] == '\n')
         {
             x = 0;
             y += 1;
         }
-
-        // Wann wollen wir scrollen?
-        if (y >= getrows())
+        else
         {
-            show(0, 0, 'x', fg_color, bg_color);
-            scroll_up();
-            y -= 1;
-        }
+            // Ende einer Zeile
+            if (x >= getcolumns())
+            {
+                x = 0;
+                y += 1;
+            }
 
-        // Zeige das Zeichen an und packe Cursor weiter
-        show(x, y, text[i], fg_color, bg_color);
-        x += 1;
-  
+            // Wann wollen wir scrollen?
+            if (y >= getrows())
+            {
+                scroll_up();
+                y -= 1;
+            }
+
+            // Zeige das Zeichen an und packe Cursor weiter
+            show(x, y, text[i], fg_color, bg_color);
+            x += 1;
+        }
     }
     setpos(x, y);
 

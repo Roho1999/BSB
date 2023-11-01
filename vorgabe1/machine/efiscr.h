@@ -31,7 +31,7 @@ public:
    void show (int x, int y, unsigned char c, Pixel fg_color, Pixel bg_color);
    void setpos (int x, int y);
    void getpos (int &x, int &y) const;
-   void print (const char* text, int length, Pixel fg_color, Pixel bg_color);
+   void print (const char* text, Pixel fg_color, Pixel bg_color);
    
 private:
    EFI_Screen(const EFI_Screen &copy) = delete; // Prohibit copying
