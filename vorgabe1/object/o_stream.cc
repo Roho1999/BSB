@@ -296,6 +296,7 @@ O_Stream& O_Stream::operator<< (O_Stream& (*fkt) (O_Stream&)){
 * @return O_Stream& 
 */
 O_Stream& endl (O_Stream& os){
+     
      os.put('\n');
      os.flush();
      return os;

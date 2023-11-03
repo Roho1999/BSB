@@ -36,7 +36,8 @@ Stringbuffer::Stringbuffer()
 void Stringbuffer::put (char c){
     this->charbuffer[this->position] = c;
     this->position += 1;
-    if (this->position >= this->length - 1) 
+
+    if (this->position > this->length - 1) 
     {
         this->flush();
         this->position = 0;
