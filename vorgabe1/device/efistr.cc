@@ -19,10 +19,12 @@
 void EFI_Stream::flush()
 {
     print(this->charbuffer, Pixel(0xffffff), Pixel(0x000000));
-    for (unsigned int i = 0; this->charbuffer[i] != '\0'; i++)
+    for (unsigned int i = 0; i < this->length; i++)
     {
         this->charbuffer[i] = '\0';
+        
     }
+    this->position = 0;
 }
 
 
