@@ -22,8 +22,9 @@ void EFI_Stream::flush()
     for (unsigned int i = 0; i < this->length; i++)
     {
         this->charbuffer[i] = '\0';
-        this->position = 0;
+        
     }
+    this->position = 0;
 }
 
 
