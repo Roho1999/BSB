@@ -24,7 +24,17 @@ private:
     PIC& operator=(const PIC& other) = delete; // Verhindere Kopieren
 public:
     PIC() {}
-/* TODO: Hier muesst ihr selbst Code vervollstaendigen */          
+    /* TODO: Hier muesst ihr selbst Code vervollstaendigen */
+
+    // Lässt zu, dass der PIC Unterbrechungen des Geräts Nummer interrupt_device an den Prozessor weiterleitet.
+    void allow (int interrupt_device);
+        
+    // Verhindert, dass der PIC Unterbrechungen des Geräts Nummer interrupt_device an den Prozessor weiterleitet.
+    void forbid (int interrupt_device);
+
+    // Gibt den Zustand des Maskierbits von interrupt_device zurück.
+    // Wenn Unterbrechungen dieses Geräts nicht an die CPU weitergeleitet werden, soll true zurückgegeben werden, andernfalls false. 
+    bool is_masked (int interrupt_device);  
  };
 
 #endif
