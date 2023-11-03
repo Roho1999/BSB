@@ -20,7 +20,11 @@ class Plugbox
 private:
     Plugbox(const Plugbox &other) = delete; // Verhindere Kopieren
     Plugbox& operator=(const Plugbox& other) = delete; // Verhindere Kopieren
+
 /* TODO: Hier muesst ihr selbst Code vervollstaendigen */ 
+    void assign (unsigned int slot, Gate& gate);
+
+    Gate& report (unsigned int slot)
  };
 
 #endif
