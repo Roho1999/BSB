@@ -10,4 +10,13 @@
 
 /* TODO: Hier muesst ihr selbst Code vervollstaendigen */ 
 /* TODO: Hier muesst ihr selbst Code vervollstaendigen */ 
- 
+#include "keyboard.h"
+
+void Keyboard::plugin (){
+
+}
+
+
+void Keyboard::trigger(){
+
+}
