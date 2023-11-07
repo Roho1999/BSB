@@ -11,9 +11,15 @@
 /* INCLUDES */
 
 #include "machine/keyctrl.h"
+#include <device/efistr.h>
+
 /* TODO: Hier muesst ihr selbst Code vervollstaendigen */ 
 
+extern EFI_Stream kout;
+
 /* STATIC MEMERS */
+
+
 
 unsigned char Keyboard_Controller::normal_tab[] =
 {
@@ -83,24 +89,24 @@ bool Keyboard_Controller::key_decoded ()
        code &= ~break_bit;     // Der Break Code einer Taste ist gleich dem
                                // Make Code mit gesetzten break_bit.
        switch (code)
-	 {
-	 case 42:  
-	 case 54:
-	    gather.shift (false);
-	    break;
-	 case 56:
-	   if (prefix == prefix1)
-	      gather.alt_right (false);
-	   else
-	      gather.alt_left (false);
-	   break;
-	 case 29:
-	   if (prefix == prefix1)
-	      gather.ctrl_right (false);
-	   else
-	      gather.ctrl_left (false);
-	   break;
-	 }
+      {
+      case 42:  
+      case 54:
+         gather.shift (false);
+         break;
+      case 56:
+         if (prefix == prefix1)
+            gather.alt_right (false);
+         else
+            gather.alt_left (false);
+         break;
+      case 29:
+         if (prefix == prefix1)
+            gather.ctrl_right (false);
+         else
+            gather.ctrl_left (false);
+         break;
+      }
 
        // Ein Prefix gilt immer nur fuer den unmittelbar nachfolgenden Code.
        // Also ist es jetzt abgehandelt.
@@ -269,20 +275,28 @@ Keyboard_Controller::Keyboard_Controller () :
 //          falls liefert key_hit () einen ungueltigen Wert zurueck, was
 //          mit Key::valid () ueberprueft werden kann.
 
+
+// Holt den Code des letzten Tastendrucks vom Tastaturcontroller.
+// Wenn eine sinnvolle Interpretation möglich ist, werden der Scancode, die gegebenenfalls gleichzeitig
+// gedrückten "Modifier"-Tasten (Shift, Ctrl, Alt, Capslock, usw.) und der ASCII-Code der Taste als Objekt der Klasse Key zurückgeliefert.
+// Wenn dagegen bloß eine der Spezialtasten Shift, Alt, CapsLock usw. gedrückt wurde, liefert die Methode ein ungültiges Key-Objekt zurück.
+// Ob das Ergebnis gültig oder nicht gültig ist, kann mit der Methode Key::valid() geprüft werden.
+
 Key Keyboard_Controller::key_hit ()
  {
    Key invalid;  // nicht explizit initialisierte Tasten sind ungueltig
-/* TODO: Hier muesst ihr selbst Code vervollstaendigen */ 
-   if(key_decoded()){
-      get_ascii_code();
-      //if(gather.valid()){
-         Key valid{gather};
-         return valid;
-      //}   
-   }       
-/* TODO: Hier muesst ihr selbst Code vervollstaendigen */ 
-/* TODO: Hier muesst ihr selbst Code vervollstaendigen */ 
-   return invalid;
+
+   // liefert true zurück, sobald Zeichen komplett und speichert in gather
+   if (key_decoded())
+   {
+      // prüfe ob Spezialtasten Shift, Alt, CapsLock usw.
+      // wenn ja, gib ungültiges Key-Objekt zurück
+      // wenn nein, gib gather zurück
+      kout << "return gather";
+      return gather;
+   }
+
+   return gather;
  }
 
 // REBOOT: Fuehrt einen Neustart des Rechners durch. Ja, beim PC macht
