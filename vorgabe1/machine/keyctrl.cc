@@ -287,17 +287,31 @@ Key Keyboard_Controller::key_hit ()
    Key invalid;  // nicht explizit initialisierte Tasten sind ungueltig
 
    // liefert true zurück, sobald Zeichen komplett und speichert in gather
-   if (key_decoded())
-   {
-      // prüfe ob Spezialtasten Shift, Alt, CapsLock usw.
-      // wenn ja, gib ungültiges Key-Objekt zurück
-      // wenn nein, gib gather zurück
-      kout << "return gather";
-      return gather;
-   }
+   int status = ctrl_port.inb();
+   //kout << ctrl_port.inb() << endl;
+   if( (status & outb) != 0 && ((status & auxb) == 0)){
+      //kout << "gesetzt" << endl;
+      unsigned char data = (unsigned char) data_port.inw();
 
-   return gather;
- }
+      code = data;
+      kout << hex << (int)data << endl;
+      kout << (int) gather.scancode() << endl;
+      if (key_decoded())
+      {
+         get_ascii_code();
+         kout  << "valid" << endl;
+         // prüfe ob Spezialtasten Shift, Alt, CapsLock usw.
+         // wenn ja, gib ungültiges Key-Objekt zurück
+         // wenn nein, gib gather zurück
+         kout << "Char: " << gather.ascii() << endl;
+         Key valid{gather};
+
+         return valid;
+      }
+   }
+   return invalid;
+}
+ 
 
 // REBOOT: Fuehrt einen Neustart des Rechners durch. Ja, beim PC macht
 //         das der Tastaturcontroller.

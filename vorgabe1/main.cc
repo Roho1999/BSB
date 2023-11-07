@@ -35,23 +35,27 @@ int main()
 
   Keyboard_Controller contr = Keyboard_Controller();
 
+  
   Key pressed;
 
   int a = 0;
   int i = 0;
   while (!is_hit)
   {
-    a = 0;
-    for (int i = 0; i < 1000000; i++)
-    {
-      a++;
-    }
-    i += 1;
-    kout << i << ' ';
+    pressed = contr.key_hit();
 
-    // pressed = contr.key_hit();
-    // kout << pressed.ascii() << 'A';
-    // kout << pressed.scancode();
+
+    // a = 0;
+    // for (int i = 0; i < 1000000; i++)
+    // {
+    //   a++;
+    // }
+    // i += 1;
+    // kout << i << ' ';
+    //kout << pressed.ascii() << endl;
+    //kout << (unsigned int) pressed.scancode();
+
+    // is_hit = true;
   }
   
   
