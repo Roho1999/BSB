@@ -146,10 +146,14 @@ void EFI_Screen::print (const char* text,
             x += 1;
         }
     }
+
+    show(x, y, '|', fg_color, bg_color);
+    //x+= 1;
     setpos(x, y);
 
     efifb.blit(fb, 0, 0);
 }
+
 
 void EFI_Screen::scroll_up()
 {
