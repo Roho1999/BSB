@@ -359,25 +359,25 @@ void Keyboard_Controller::set_repeat_rate (int speed, int delay)
          ack = true;
 
          if(25 <= speed && speed <= 30){
-            data_port.outw(delay & 0x00);
+            data_port.outb(delay & 0x00);
          }else if (20 <= speed && speed <= 25)
          {
-            data_port.outw(delay & 0x02);
+            data_port.outb(delay & 0x02);
          }else if (15 <= speed && speed <= 20)
          {
-            data_port.outw(delay & 0x04);
+            data_port.outb(delay & 0x04);
          }else if (10 <= speed && speed  <= 15)
          {
-            data_port.outw(delay & 0x08);
+            data_port.outb(delay & 0x08);
          }else if (7 <= speed && speed <= 10)
          {
-            data_port.outw(delay & 0x0c);
+            data_port.outb(delay & 0x0c);
          }else if (5 <= speed && speed <= 7)
          {
-            data_port.outw(delay & 0x10);
+            data_port.outb(delay & 0x10);
          }else if (0 <= speed && speed  <= 5)
          {
-            data_port.outw(delay & 0x14);
+            data_port.outb(delay & 0x14);
          }
          
       }    
@@ -405,10 +405,10 @@ void Keyboard_Controller::set_led (char led, bool on)
          ack = true;
          if(on){
             kout << "led on" << endl;
-            data_port.outw(led && data_port.inw());
+            data_port.outb(led && data_port.inb());
          }else{
             kout << "led off" << endl;
-            data_port.outw(~led && data_port.inw());
+            data_port.outb(~led && data_port.inb());
          }
          
       }
