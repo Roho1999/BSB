@@ -273,7 +273,13 @@ Key Keyboard_Controller::key_hit ()
  {
    Key invalid;  // nicht explizit initialisierte Tasten sind ungueltig
 /* TODO: Hier muesst ihr selbst Code vervollstaendigen */ 
-          
+   if(key_decoded()){
+      get_ascii_code();
+      //if(gather.valid()){
+         Key valid{gather};
+         return valid;
+      //}   
+   }       
 /* TODO: Hier muesst ihr selbst Code vervollstaendigen */ 
 /* TODO: Hier muesst ihr selbst Code vervollstaendigen */ 
    return invalid;
