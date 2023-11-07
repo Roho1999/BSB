@@ -38,29 +38,42 @@ int main()
   
   Key pressed;
 
-  int a = 0;
-  int i = 0;
+  contr.set_repeat_rate(0,30);
+  while (!is_hit &&  pressed.ascii() != 's')
+  {
+    
+    pressed = contr.key_hit();
+    if(pressed.valid()){
+      
+      kout << pressed.ascii();
+
+      kout.flush();
+    
+      //is_hit = true;
+      
+
+
+    }
+  }
+  contr.set_repeat_rate(1,4);
+
+
+  contr.set_led(4, true);
+
   while (!is_hit)
   {
+    
     pressed = contr.key_hit();
+    if(pressed.valid()){
+      
+      kout << pressed.ascii();
+      kout.flush();
+      
 
 
-    // a = 0;
-    // for (int i = 0; i < 1000000; i++)
-    // {
-    //   a++;
-    // }
-    // i += 1;
-    // kout << i << ' ';
-    //kout << pressed.ascii() << endl;
-    //kout << (unsigned int) pressed.scancode();
-
-    // is_hit = true;
+    }
   }
-  
-  
 
-  
  
   return 0;
 }

@@ -294,16 +294,16 @@ Key Keyboard_Controller::key_hit ()
       unsigned char data = (unsigned char) data_port.inw();
 
       code = data;
-      kout << hex << (int)data << endl;
-      kout << (int) gather.scancode() << endl;
+      // kout << hex << (int)data << endl;
+      // kout << (int) gather.scancode() << endl;
       if (key_decoded())
       {
-         get_ascii_code();
-         kout  << "valid" << endl;
+         //get_ascii_code();
+         //kout  << "valid" << endl;
          // prüfe ob Spezialtasten Shift, Alt, CapsLock usw.
          // wenn ja, gib ungültiges Key-Objekt zurück
          // wenn nein, gib gather zurück
-         kout << "Char: " << gather.ascii() << endl;
+         //kout << "Char: " << gather.ascii() << endl;
          Key valid{gather};
 
          return valid;
@@ -346,15 +346,80 @@ void Keyboard_Controller::set_repeat_rate (int speed, int delay)
 /* TODO: Hier muesst ihr selbst Code vervollstaendigen */ 
 /* TODO: Hier muesst ihr selbst Code vervollstaendigen */ 
 /* TODO: Hier muesst ihr selbst Code vervollstaendigen */          
-/* TODO: Hier muesst ihr selbst Code vervollstaendigen */          
- }
+/* TODO: Hier muesst ihr selbst Code vervollstaendigen */    
+   //int status_byte = ctrl_port.inb();
+
+   data_port.outb(kbd_cmd::set_speed);
+   
+
+   //ctrl_port.outb(inb || status_byte);
+   bool ack = false;
+   while(!ack){
+      if(data_port.inb() == 0xfa){
+         ack = true;
+
+         if(25 <= speed && speed <= 30){
+            data_port.outw(delay & 0x00);
+         }else if (20 <= speed && speed <= 25)
+         {
+            data_port.outw(delay & 0x02);
+         }else if (15 <= speed && speed <= 20)
+         {
+            data_port.outw(delay & 0x04);
+         }else if (10 <= speed && speed  <= 15)
+         {
+            data_port.outw(delay & 0x08);
+         }else if (7 <= speed && speed <= 10)
+         {
+            data_port.outw(delay & 0x0c);
+         }else if (5 <= speed && speed <= 7)
+         {
+            data_port.outw(delay & 0x10);
+         }else if (0 <= speed && speed  <= 5)
+         {
+            data_port.outw(delay & 0x14);
+         }
+         
+      }    
+   }
+   while (data_port.inb() != 0xfa)
+   {
+      kout << "waiting for ack" << endl;
+      
+   }
+   //kout << "Fertig" << endl;
+}
+
 
 // SET_LED: setzt oder loescht die angegebene Leuchtdiode
 
 void Keyboard_Controller::set_led (char led, bool on)
  {
 /* TODO: Hier muesst ihr selbst Code vervollstaendigen */ 
-/* TODO: Hier muesst ihr selbst Code vervollstaendigen */ 
-/* TODO: Hier muesst ihr selbst Code vervollstaendigen */ 
-/* TODO: Hier muesst ihr selbst Code vervollstaendigen */          
- }
+   bool ack = false;
+   
+   data_port.outb(kbd_cmd::set_led);
+   while(!ack){
+      if(data_port.inb() == 0xfa){
+         
+         ack = true;
+         if(on){
+            kout << "led on" << endl;
+            data_port.outw(led && data_port.inw());
+         }else{
+            kout << "led off" << endl;
+            data_port.outw(~led && data_port.inw());
+         }
+         
+      }
+
+   }
+   
+   while (data_port.inb() != 0xfa)
+   {
+      kout << "waiting for ack" << endl;
+      
+   }
+   
+   //kout << "Fertig" << endl;
+}
